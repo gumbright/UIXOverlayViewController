@@ -36,6 +36,7 @@
 		E43191FC1BD5EDC500474B36 /* UIXOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIXOverlayViewController.h; sourceTree = "<group>"; };
 		E43191FD1BD5EDC500474B36 /* UIXOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIXOverlayViewController.m; sourceTree = "<group>"; };
 		E43191FF1BD5F24300474B36 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E43192011BD5F3E900474B36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +53,7 @@
 		E43191B61BD4669C00474B36 = {
 			isa = PBXGroup;
 			children = (
+				E43192011BD5F3E900474B36 /* LICENSE */,
 				E43191FF1BD5F24300474B36 /* README.md */,
 				E43191FB1BD5EDC500474B36 /* UIXOverlayViewController */,
 				E43191C11BD4669C00474B36 /* UIXOverlayViewControllerDemo */,

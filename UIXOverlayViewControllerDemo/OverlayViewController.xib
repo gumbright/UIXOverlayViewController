@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OverlayViewController">
+            <connections>
+                <outlet property="view" destination="7Ca-HI-iuf" id="e8e-UD-Znu"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="7Ca-HI-iuf">
+            <rect key="frame" x="0.0" y="0.0" width="200" height="300"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mjD-5H-VOG">
+                    <rect key="frame" x="73" y="249" width="54" height="30"/>
+                    <animations/>
+                    <state key="normal" title="Dismiss"/>
+                    <connections>
+                        <action selector="dismissPressed:" destination="-1" eventType="touchUpInside" id="0Ew-wj-k7N"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is the overlay" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGz-gn-8Km">
+                    <rect key="frame" x="31" y="140" width="138" height="21"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="mjD-5H-VOG" secondAttribute="bottom" constant="20" id="Ach-w8-NwY"/>
+                <constraint firstItem="zGz-gn-8Km" firstAttribute="centerX" secondItem="7Ca-HI-iuf" secondAttribute="centerX" id="Di0-Wt-7JK"/>
+                <constraint firstItem="mjD-5H-VOG" firstAttribute="centerX" secondItem="7Ca-HI-iuf" secondAttribute="centerX" id="H0V-6S-nzH"/>
+                <constraint firstItem="zGz-gn-8Km" firstAttribute="centerY" secondItem="7Ca-HI-iuf" secondAttribute="centerY" id="P2s-bv-dGP"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="627.5" y="454"/>
+        </view>
+    </objects>
+</document>

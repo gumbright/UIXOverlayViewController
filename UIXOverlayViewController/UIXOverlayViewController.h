@@ -39,6 +39,7 @@
 @property (assign) BOOL dismissUponTouchMask;
 @property (nonatomic, strong) UIColor* maskColor;
 @property (nonatomic, weak) NSObject<UIXOverlayViewControllerDelegate>* overlayDelegate;
+@property (nonatomic, assign) NSTimeInterval minimumDisplayTime;
 
 - (void) presentOverlayOn:(UIViewController*) parent
                  animated:(BOOL) animated;

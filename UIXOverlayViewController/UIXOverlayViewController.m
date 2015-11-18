@@ -14,7 +14,22 @@
 @property (nonatomic, strong) UIXOverlayMaskView* maskView;
 @end
 
+@interface UIXOverlayViewController()
+@property (nonatomic, strong) NSDate* whenPresented;
+@end
+
 @implementation UIXOverlayViewController
+/////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////
+- (instancetype) init
+{
+    if (self = [super init])
+    {
+        self.minimumDisplayTime = 0.0;
+    }
+    return self;
+}
 
 /////////////////////////////////////////////////////
 //
@@ -22,6 +37,8 @@
 - (void) presentOverlayOn:(UIViewController*) parent
                  animated:(BOOL) animated
 {
+    self.whenPresented = [NSDate date];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
     
     [parent addChildViewController:self];
@@ -168,25 +185,38 @@
 ///////////////////////////////////////////////
 - (void) dismissOverlay:(BOOL) animated
 {
-    [self.view removeFromSuperview];
+    NSDate* now = [NSDate date];
     
-    if (animated)
+    NSTimeInterval timeDisplayed = [now timeIntervalSinceDate:self.whenPresented];
+    
+    NSTimeInterval delayTime = self.minimumDisplayTime - timeDisplayed;
+    if (delayTime < 0)
     {
-        [UIView beginAnimations:@"maskfadeout" context:nil];
-        [UIView setAnimationDidStopSelector:@selector(maskFadeOutComplete:finished:context:)];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDuration:0.3];
-        self.maskView.alpha = 0.0;
-        [UIView commitAnimations];
+        delayTime = 0.0;
     }
-    else
-    {
-        if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+    
+    NSLog(@"UIXOverlayViewController dismiss delay = %f",delayTime);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.view removeFromSuperview];
+        
+        if (animated)
         {
-            [self viewDidDisappear:NO];
+            [UIView beginAnimations:@"maskfadeout" context:nil];
+            [UIView setAnimationDidStopSelector:@selector(maskFadeOutComplete:finished:context:)];
+            [UIView setAnimationDelegate:self];
+            [UIView setAnimationDuration:0.3];
+            self.maskView.alpha = 0.0;
+            [UIView commitAnimations];
         }
-        [self detachOverlay];
-    }	
+        else
+        {
+            if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+            {
+                [self viewDidDisappear:NO];
+            }
+            [self detachOverlay];
+        }	
+    });
 }
 
 @end

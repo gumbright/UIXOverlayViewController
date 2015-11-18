@@ -30,6 +30,8 @@
 {
     OverlayViewController* vc = [[OverlayViewController alloc] init];
     
+    vc.dismissUponTouchMask = YES;
+    vc.minimumDisplayTime = 10.0;
     [vc presentOverlayOn:self animated:YES];
 }
 

@@ -33,6 +33,8 @@
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
+typedef void (^UIXOverlayViewControllerBlock)();
+
 @interface UIXOverlayViewController : UIViewController
 {
 }
@@ -43,6 +45,14 @@
 
 - (void) presentOverlayOn:(UIViewController*) parent
                  animated:(BOOL) animated;
+- (void) presentOverlayOn:(UIViewController*) parent
+                 animated:(BOOL) animated
+          completionBlock:(UIXOverlayViewControllerBlock) completionBlock;
+
+
 - (void) dismissOverlay:(BOOL) animated;
+- (void) dismissOverlay:(BOOL) animated
+        completionBlock:(UIXOverlayViewControllerBlock) completionBlock;
+
 
 @end

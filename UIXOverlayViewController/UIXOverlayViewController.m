@@ -16,6 +16,8 @@
 
 @interface UIXOverlayViewController()
 @property (nonatomic, strong) NSDate* whenPresented;
+@property (nonatomic, copy) UIXOverlayViewControllerBlock displayCompletionBlock;
+@property (nonatomic, copy) UIXOverlayViewControllerBlock dismissCompletionBlock;
 @end
 
 @implementation UIXOverlayViewController
@@ -37,8 +39,18 @@
 - (void) presentOverlayOn:(UIViewController*) parent
                  animated:(BOOL) animated
 {
-    self.whenPresented = [NSDate date];
+    [self presentOverlayOn:parent animated:animated completionBlock:nil];
+}
 
+/////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////
+- (void) presentOverlayOn:(UIViewController*) parent
+                 animated:(BOOL) animated
+completionBlock:(UIXOverlayViewControllerBlock)completionBlock
+{
+    self.whenPresented = [NSDate date];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
     
     [parent addChildViewController:self];
@@ -54,6 +66,7 @@
     
     if (animated)
     {
+        self.displayCompletionBlock = completionBlock;
         self.maskView.alpha = 0.0;
         [parent.view addSubview:self.maskView];
         
@@ -81,6 +94,11 @@
         if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
         {
             [self viewDidAppear:NO];
+        }
+        
+        if (completionBlock != nil)
+        {
+            completionBlock();
         }
     }
 }
@@ -133,9 +151,15 @@
                          {
                              [self.overlayDelegate overlayContentDisplayed:self];
                          }
+                         
                          if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
                          {
                              [self viewDidAppear:YES];
+                         }
+                         
+                         if (self.displayCompletionBlock != nil)
+                         {
+                             self.displayCompletionBlock();
                          }
                      }];
 }
@@ -165,7 +189,13 @@
     {
         [self viewDidDisappear:YES];
     }
+
     [self detachOverlay];
+
+    if (self.dismissCompletionBlock != nil)
+    {
+        self.dismissCompletionBlock();
+    }
 }
 
 /////////////////////////////////////////////////////
@@ -185,6 +215,15 @@
 ///////////////////////////////////////////////
 - (void) dismissOverlay:(BOOL) animated
 {
+    [self dismissOverlay:animated completionBlock:nil];
+}
+
+///////////////////////////////////////////////
+//
+///////////////////////////////////////////////
+- (void) dismissOverlay:(BOOL) animated
+        completionBlock:(UIXOverlayViewControllerBlock) completionBlock;
+{
     NSDate* now = [NSDate date];
     
     NSTimeInterval timeDisplayed = [now timeIntervalSinceDate:self.whenPresented];
@@ -201,6 +240,7 @@
         
         if (animated)
         {
+            self.dismissCompletionBlock = completionBlock;
             [UIView beginAnimations:@"maskfadeout" context:nil];
             [UIView setAnimationDidStopSelector:@selector(maskFadeOutComplete:finished:context:)];
             [UIView setAnimationDelegate:self];
@@ -215,7 +255,14 @@
                 [self viewDidDisappear:NO];
             }
             [self detachOverlay];
-        }	
+
+            if (completionBlock != nil)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completionBlock();
+                });
+            }
+        }
     });
 }
 

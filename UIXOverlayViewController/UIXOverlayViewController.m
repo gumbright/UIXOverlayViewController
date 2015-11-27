@@ -56,49 +56,49 @@
     __weak __typeof__ (self) weakself = self;
     
     NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
-        [[NSNotificationCenter defaultCenter] addObserver:weakself selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
         
-        [parent addChildViewController:weakself];
+        [parent addChildViewController:self];
         
         //create mask
         CGRect frame = parent.view.frame;
         frame.origin.x = 0;
         frame.origin.y = 0;
         
-        weakself.maskView = [[UIXOverlayMaskView alloc] initWithFrame:frame];
+        self.maskView = [[UIXOverlayMaskView alloc] initWithFrame:frame];
         
-        weakself.maskView.backgroundColor = (weakself.maskColor != nil) ? weakself.maskColor : [UIColor colorWithWhite:.0 alpha:.75];
+        self.maskView.backgroundColor = (self.maskColor != nil) ? self.maskColor : [UIColor colorWithWhite:.0 alpha:.75];
         
         if (animated)
         {
-            weakself.displayCompletionBlock = completionBlock;
-            weakself.maskView.alpha = 0.0;
-            [parent.view addSubview:weakself.maskView];
+            self.displayCompletionBlock = completionBlock;
+            self.maskView.alpha = 0.0;
+            [parent.view addSubview:self.maskView];
             
             [UIView beginAnimations:@"maskfadein" context:nil];
             [UIView setAnimationDidStopSelector:@selector(maskFadeInComplete:finished:context:)];
-            [UIView setAnimationDelegate:weakself];
+            [UIView setAnimationDelegate:self];
             [UIView setAnimationDuration:0.25];
-            weakself.maskView.alpha = 0.5;
+            self.maskView.alpha = 0.5;
             [UIView commitAnimations];
         }
         else
         {
-            [parent.view addSubview:weakself.maskView];
+            [parent.view addSubview:self.maskView];
             
-            frame = weakself.view.frame;
+            frame = self.view.frame;
             
             CGRect placement = frame;
             placement.origin.x = (parent.view.frame.size.width - placement.size.width)/2;
             placement.origin.y = (parent.view.frame.size.height - placement.size.height)/2;
             
-            weakself.view.frame = placement;
+            self.view.frame = placement;
             
-            [weakself.maskView addSubview:weakself.view];
+            [self.maskView addSubview:self.view];
             
             if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
             {
-                [weakself viewDidAppear:NO];
+                [self viewDidAppear:NO];
             }
             
             if (completionBlock != nil)

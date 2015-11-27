@@ -24,21 +24,21 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)dismissPressed:(id)sender
-{
-    UIXOverlayViewControllerBlock block = ^{
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Dismissed"
-                                                                       message:@"overlay dismissed"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
-    };
-    [self dismissOverlay:YES completionBlock:block];
-}
+//- (IBAction)dismissPressed:(id)sender
+//{
+//    UIXOverlayViewControllerBlock block = ^{
+//        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Dismissed"
+//                                                                       message:@"overlay dismissed"
+//                                                                preferredStyle:UIAlertControllerStyleAlert];
+//        
+//        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+//                                                              handler:^(UIAlertAction * action) {}];
+//        
+//        [alert addAction:defaultAction];
+//        [self presentViewController:alert animated:YES completion:nil];
+//    };
+//    [self dismissOverlay:YES completionBlock:nil];
+//}
 
 /*
 #pragma mark - Navigation

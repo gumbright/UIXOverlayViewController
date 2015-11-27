@@ -31,7 +31,8 @@
     OverlayViewController* vc = [[OverlayViewController alloc] init];
     
     vc.dismissUponTouchMask = YES;
-    vc.minimumDisplayTime = 0.0;
+    vc.minimumDisplayTime = 5.0;
+    self.overlay = vc;
     
     UIXOverlayViewControllerBlock block = ^{
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Displayed"
@@ -44,7 +45,23 @@
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
     };
-    [vc presentOverlayOn:self animated:YES completionBlock:block];
+    [vc presentOverlayOn:self animated:YES completionBlock:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [vc dismissOverlay:YES completionBlock:^{
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Displayed"
+                                                                           message:@"overlay display completed"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+
+        }];
+    });
+
 }
 
 @end

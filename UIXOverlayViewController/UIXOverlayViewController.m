@@ -45,62 +45,69 @@
 /////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////
 - (void) presentOverlayOn:(UIViewController*) parent
                  animated:(BOOL) animated
-completionBlock:(UIXOverlayViewControllerBlock)completionBlock
+          completionBlock:(UIXOverlayViewControllerBlock)completionBlock
 {
     self.whenPresented = [NSDate date];
+    __weak __typeof__ (self) weakself = self;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
-    
-    [parent addChildViewController:self];
-    
-    //create mask
-    CGRect frame = parent.view.frame;
-    frame.origin.x = 0;
-    frame.origin.y = 0;
-    
-    self.maskView = [[UIXOverlayMaskView alloc] initWithFrame:frame];
-    
-    self.maskView.backgroundColor = (self.maskColor != nil) ? self.maskColor : [UIColor colorWithWhite:.0 alpha:.75];
-    
-    if (animated)
-    {
-        self.displayCompletionBlock = completionBlock;
-        self.maskView.alpha = 0.0;
-        [parent.view addSubview:self.maskView];
+    NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] addObserver:weakself selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
         
-        [UIView beginAnimations:@"maskfadein" context:nil];
-        [UIView setAnimationDidStopSelector:@selector(maskFadeInComplete:finished:context:)];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDuration:0.25];
-        self.maskView.alpha = 0.5;
-        [UIView commitAnimations];
-    }
-    else
-    {
-        [parent.view addSubview:self.maskView];
+        [parent addChildViewController:weakself];
         
-        frame = self.view.frame;
+        //create mask
+        CGRect frame = parent.view.frame;
+        frame.origin.x = 0;
+        frame.origin.y = 0;
         
-        CGRect placement = frame;
-        placement.origin.x = (parent.view.frame.size.width - placement.size.width)/2;
-        placement.origin.y = (parent.view.frame.size.height - placement.size.height)/2;
+        weakself.maskView = [[UIXOverlayMaskView alloc] initWithFrame:frame];
         
-        self.view.frame = placement;
+        weakself.maskView.backgroundColor = (weakself.maskColor != nil) ? weakself.maskColor : [UIColor colorWithWhite:.0 alpha:.75];
         
-        [self.maskView addSubview:self.view];
-        
-        if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+        if (animated)
         {
-            [self viewDidAppear:NO];
+            weakself.displayCompletionBlock = completionBlock;
+            weakself.maskView.alpha = 0.0;
+            [parent.view addSubview:weakself.maskView];
+            
+            [UIView beginAnimations:@"maskfadein" context:nil];
+            [UIView setAnimationDidStopSelector:@selector(maskFadeInComplete:finished:context:)];
+            [UIView setAnimationDelegate:weakself];
+            [UIView setAnimationDuration:0.25];
+            weakself.maskView.alpha = 0.5;
+            [UIView commitAnimations];
         }
-        
-        if (completionBlock != nil)
+        else
         {
-            completionBlock();
+            [parent.view addSubview:weakself.maskView];
+            
+            frame = weakself.view.frame;
+            
+            CGRect placement = frame;
+            placement.origin.x = (parent.view.frame.size.width - placement.size.width)/2;
+            placement.origin.y = (parent.view.frame.size.height - placement.size.height)/2;
+            
+            weakself.view.frame = placement;
+            
+            [weakself.maskView addSubview:weakself.view];
+            
+            if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+            {
+                [weakself viewDidAppear:NO];
+            }
+            
+            if (completionBlock != nil)
+            {
+                completionBlock();
+            }
         }
-    }
+    }];
+    [[NSOperationQueue mainQueue] addOperation:blockOp];
 }
 
 ///////////////////////////////////////////////
@@ -185,6 +192,7 @@ completionBlock:(UIXOverlayViewControllerBlock)completionBlock
 ///////////////////////////////////////////////
 - (void)maskFadeOutComplete:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
 {
+    NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
     if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
     {
         [self viewDidDisappear:YES];
@@ -196,6 +204,8 @@ completionBlock:(UIXOverlayViewControllerBlock)completionBlock
     {
         self.dismissCompletionBlock();
     }
+    }];
+    [[NSOperationQueue mainQueue] addOperation:blockOp];
 }
 
 /////////////////////////////////////////////////////
@@ -236,33 +246,37 @@ completionBlock:(UIXOverlayViewControllerBlock)completionBlock
     
     NSLog(@"UIXOverlayViewController dismiss delay = %f",delayTime);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.view removeFromSuperview];
         
-        if (animated)
-        {
-            self.dismissCompletionBlock = completionBlock;
-            [UIView beginAnimations:@"maskfadeout" context:nil];
-            [UIView setAnimationDidStopSelector:@selector(maskFadeOutComplete:finished:context:)];
-            [UIView setAnimationDelegate:self];
-            [UIView setAnimationDuration:0.3];
-            self.maskView.alpha = 0.0;
-            [UIView commitAnimations];
-        }
-        else
-        {
-            if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+        NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
+            [self.view removeFromSuperview];
+            
+            if (animated)
             {
-                [self viewDidDisappear:NO];
+                self.dismissCompletionBlock = completionBlock;
+                [UIView beginAnimations:@"maskfadeout" context:nil];
+                [UIView setAnimationDidStopSelector:@selector(maskFadeOutComplete:finished:context:)];
+                [UIView setAnimationDelegate:self];
+                [UIView setAnimationDuration:0.3];
+                self.maskView.alpha = 0.0;
+                [UIView commitAnimations];
             }
-            [self detachOverlay];
-
-            if (completionBlock != nil)
+            else
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock();
-                });
+                if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+                {
+                    [self viewDidDisappear:NO];
+                }
+                [self detachOverlay];
+                
+                if (completionBlock != nil)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completionBlock();
+                    });
+                }
             }
-        }
+        }];
+        [[NSOperationQueue mainQueue] addOperation:blockOp];
     });
 }
 

@@ -14,14 +14,6 @@
             <rect key="frame" x="0.0" y="0.0" width="200" height="300"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mjD-5H-VOG">
-                    <rect key="frame" x="73" y="249" width="54" height="30"/>
-                    <animations/>
-                    <state key="normal" title="Dismiss"/>
-                    <connections>
-                        <action selector="dismissPressed:" destination="-1" eventType="touchUpInside" id="0Ew-wj-k7N"/>
-                    </connections>
-                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is the overlay" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGz-gn-8Km">
                     <rect key="frame" x="31" y="140" width="138" height="21"/>
                     <animations/>
@@ -33,9 +25,7 @@
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="mjD-5H-VOG" secondAttribute="bottom" constant="20" id="Ach-w8-NwY"/>
                 <constraint firstItem="zGz-gn-8Km" firstAttribute="centerX" secondItem="7Ca-HI-iuf" secondAttribute="centerX" id="Di0-Wt-7JK"/>
-                <constraint firstItem="mjD-5H-VOG" firstAttribute="centerX" secondItem="7Ca-HI-iuf" secondAttribute="centerX" id="H0V-6S-nzH"/>
                 <constraint firstItem="zGz-gn-8Km" firstAttribute="centerY" secondItem="7Ca-HI-iuf" secondAttribute="centerY" id="P2s-bv-dGP"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

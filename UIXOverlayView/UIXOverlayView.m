@@ -61,25 +61,29 @@
     NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
         
-        //[parent addChildViewController:self];
-        
         //create mask
         CGRect frame = parent.frame;
         frame.origin.x = 0;
         frame.origin.y = 0;
         
         self.maskView = [[UIXOverlayMaskView alloc] initWithFrame:frame];
+        self.maskView.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.maskView.backgroundColor = (self.maskColor != nil) ? self.maskColor : [UIColor colorWithWhite:.0 alpha:.75];
+        
+        [parent addSubview:self.maskView];
+        [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
+        [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
+        [parent setNeedsLayout];
         
         if (animated)
         {
             self.displayCompletionBlock = completionBlock;
             self.maskView.alpha = 0.0;
+            
             [parent addSubview:self.maskView];
             [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
             [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
-            [parent setNeedsLayout];
             
             [UIView beginAnimations:@"maskfadein" context:nil];
             [UIView setAnimationDidStopSelector:@selector(maskFadeInComplete:finished:context:)];
@@ -90,11 +94,6 @@
         }
         else
         {
-            [parent addSubview:self.maskView];
-            
-            [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
-            [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
-            [parent setNeedsLayout];
             frame = self.frame;
             
             CGRect placement = frame;

@@ -70,7 +70,7 @@
     UIXOverlayView* ov = [[[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil] firstObject];
     ov.dismissUponTouchMask = YES;
     
-    [ov presentOverlayOn:self.view.window animated:NO completionBlock:nil];
+    [ov presentOverlayOn:self.view.window animated:YES completionBlock:nil];
 }
 
 @end

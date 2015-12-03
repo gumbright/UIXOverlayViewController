@@ -7,16 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E43191ED1BD5ECC400474B36 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191E21BD5ECC400474B36 /* AppDelegate.m */; settings = {ASSET_TAGS = (); }; };
-		E43191EE1BD5ECC400474B36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E43191E31BD5ECC400474B36 /* Assets.xcassets */; settings = {ASSET_TAGS = (); }; };
-		E43191EF1BD5ECC400474B36 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E43191E41BD5ECC400474B36 /* Info.plist */; settings = {ASSET_TAGS = (); }; };
-		E43191F01BD5ECC400474B36 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191E51BD5ECC400474B36 /* main.m */; settings = {ASSET_TAGS = (); }; };
-		E43191F11BD5ECC400474B36 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191E71BD5ECC400474B36 /* OverlayViewController.m */; settings = {ASSET_TAGS = (); }; };
-		E43191F21BD5ECC400474B36 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E43191E81BD5ECC400474B36 /* OverlayViewController.xib */; settings = {ASSET_TAGS = (); }; };
-		E43191F41BD5ECC400474B36 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191EC1BD5ECC400474B36 /* ViewController.m */; settings = {ASSET_TAGS = (); }; };
-		E43191F91BD5ECE900474B36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43191F51BD5ECE900474B36 /* LaunchScreen.storyboard */; settings = {ASSET_TAGS = (); }; };
-		E43191FA1BD5ECE900474B36 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43191F71BD5ECE900474B36 /* Main.storyboard */; settings = {ASSET_TAGS = (); }; };
-		E43191FE1BD5EDC500474B36 /* UIXOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191FD1BD5EDC500474B36 /* UIXOverlayViewController.m */; settings = {ASSET_TAGS = (); }; };
+		E43191ED1BD5ECC400474B36 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191E21BD5ECC400474B36 /* AppDelegate.m */; };
+		E43191EE1BD5ECC400474B36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E43191E31BD5ECC400474B36 /* Assets.xcassets */; };
+		E43191EF1BD5ECC400474B36 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E43191E41BD5ECC400474B36 /* Info.plist */; };
+		E43191F01BD5ECC400474B36 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191E51BD5ECC400474B36 /* main.m */; };
+		E43191F11BD5ECC400474B36 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191E71BD5ECC400474B36 /* OverlayViewController.m */; };
+		E43191F21BD5ECC400474B36 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E43191E81BD5ECC400474B36 /* OverlayViewController.xib */; };
+		E43191F41BD5ECC400474B36 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191EC1BD5ECC400474B36 /* ViewController.m */; };
+		E43191F91BD5ECE900474B36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43191F51BD5ECE900474B36 /* LaunchScreen.storyboard */; };
+		E43191FA1BD5ECE900474B36 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43191F71BD5ECE900474B36 /* Main.storyboard */; };
+		E43191FE1BD5EDC500474B36 /* UIXOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E43191FD1BD5EDC500474B36 /* UIXOverlayViewController.m */; };
+		E4D98DAD1C0E6847006BFEEE /* UIXOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4D98DAC1C0E6847006BFEEE /* UIXOverlayView.m */; };
+		E4D98DB01C0E6F58006BFEEE /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4D98DAF1C0E6F58006BFEEE /* OverlayView.m */; };
+		E4D98DB21C0E6F6D006BFEEE /* OverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D98DB11C0E6F6D006BFEEE /* OverlayView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,11 @@
 		E43191FD1BD5EDC500474B36 /* UIXOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIXOverlayViewController.m; sourceTree = "<group>"; };
 		E43191FF1BD5F24300474B36 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E43192011BD5F3E900474B36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E4D98DAB1C0E6847006BFEEE /* UIXOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIXOverlayView.h; sourceTree = "<group>"; };
+		E4D98DAC1C0E6847006BFEEE /* UIXOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIXOverlayView.m; sourceTree = "<group>"; };
+		E4D98DAE1C0E6F58006BFEEE /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayView.h; path = UIXOverlayViewControllerDemo/OverlayView.h; sourceTree = SOURCE_ROOT; };
+		E4D98DAF1C0E6F58006BFEEE /* OverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayView.m; path = UIXOverlayViewControllerDemo/OverlayView.m; sourceTree = SOURCE_ROOT; };
+		E4D98DB11C0E6F6D006BFEEE /* OverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OverlayView.xib; path = UIXOverlayViewControllerDemo/OverlayView.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +64,7 @@
 				E43192011BD5F3E900474B36 /* LICENSE */,
 				E43191FF1BD5F24300474B36 /* README.md */,
 				E43191FB1BD5EDC500474B36 /* UIXOverlayViewController */,
+				E4D98DAA1C0E6847006BFEEE /* UIXOverlayView */,
 				E43191C11BD4669C00474B36 /* UIXOverlayViewControllerDemo */,
 				E43191C01BD4669C00474B36 /* Products */,
 			);
@@ -84,6 +93,9 @@
 				E43191EB1BD5ECC400474B36 /* ViewController.h */,
 				E43191EC1BD5ECC400474B36 /* ViewController.m */,
 				E43191C21BD4669C00474B36 /* Supporting Files */,
+				E4D98DAE1C0E6F58006BFEEE /* OverlayView.h */,
+				E4D98DAF1C0E6F58006BFEEE /* OverlayView.m */,
+				E4D98DB11C0E6F6D006BFEEE /* OverlayView.xib */,
 			);
 			name = UIXOverlayViewControllerDemo;
 			path = oc2;
@@ -104,6 +116,15 @@
 				E43191FD1BD5EDC500474B36 /* UIXOverlayViewController.m */,
 			);
 			path = UIXOverlayViewController;
+			sourceTree = "<group>";
+		};
+		E4D98DAA1C0E6847006BFEEE /* UIXOverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				E4D98DAB1C0E6847006BFEEE /* UIXOverlayView.h */,
+				E4D98DAC1C0E6847006BFEEE /* UIXOverlayView.m */,
+			);
+			path = UIXOverlayView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E43191F21BD5ECC400474B36 /* OverlayViewController.xib in Resources */,
+				E4D98DB21C0E6F6D006BFEEE /* OverlayView.xib in Resources */,
 				E43191FA1BD5ECE900474B36 /* Main.storyboard in Resources */,
 				E43191F91BD5ECE900474B36 /* LaunchScreen.storyboard in Resources */,
 				E43191EF1BD5ECC400474B36 /* Info.plist in Resources */,
@@ -178,7 +200,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D98DAD1C0E6847006BFEEE /* UIXOverlayView.m in Sources */,
 				E43191FE1BD5EDC500474B36 /* UIXOverlayViewController.m in Sources */,
+				E4D98DB01C0E6F58006BFEEE /* OverlayView.m in Sources */,
 				E43191ED1BD5ECC400474B36 /* AppDelegate.m in Sources */,
 				E43191F11BD5ECC400474B36 /* OverlayViewController.m in Sources */,
 				E43191F41BD5ECC400474B36 /* ViewController.m in Sources */,

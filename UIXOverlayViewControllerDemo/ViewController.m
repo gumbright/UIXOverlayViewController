@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "UIXOverlayViewController.h"
+#import "UIXOverlayView.h"
 #import "OverlayViewController.h"
 
 @interface ViewController ()
@@ -62,6 +63,14 @@
         }];
     });
 
+}
+
+- (IBAction)showOverlayViewPressed:(id)sender
+{
+    UIXOverlayView* ov = [[[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil] firstObject];
+    ov.dismissUponTouchMask = YES;
+    
+    [ov presentOverlayOn:self.view.window animated:NO completionBlock:nil];
 }
 
 @end

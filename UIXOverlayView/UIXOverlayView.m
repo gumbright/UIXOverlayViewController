@@ -6,21 +6,22 @@
 //  Copyright © 2015 Guy Umbright. All rights reserved.
 //
 
-#import "UIXOverlayViewController.h"
-#define DISMISS_MASK_NOTIFICATION		@"OverlayControllerDismissMask"
+#import "UIXOverlayView.h"
+#define DISMISS_MASK_NOTIFICATION		@"OverlayViewDismissMask"
 
 
-@interface UIXOverlayViewController()
-@property (nonatomic, strong) UIXOverlayControllerMaskView* maskView;
+@interface UIXOverlayView()
+@property (nonatomic, strong) UIXOverlayMaskView* maskView;
 @end
 
-@interface UIXOverlayViewController()
+@interface UIXOverlayView()
 @property (nonatomic, strong) NSDate* whenPresented;
-@property (nonatomic, copy) UIXOverlayViewControllerBlock displayCompletionBlock;
-@property (nonatomic, copy) UIXOverlayViewControllerBlock dismissCompletionBlock;
+@property (nonatomic, copy) UIXOverlayViewBlock displayCompletionBlock;
+@property (nonatomic, copy) UIXOverlayViewBlock dismissCompletionBlock;
+@property (nonatomic, assign) BOOL animated;
 @end
 
-@implementation UIXOverlayViewController
+@implementation UIXOverlayView
 /////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////
@@ -36,7 +37,7 @@
 /////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////
-- (void) presentOverlayOn:(UIViewController*) parent
+- (void) presentOverlayOn:(UIView*) parent
                  animated:(BOOL) animated
 {
     [self presentOverlayOn:parent animated:animated completionBlock:nil];
@@ -48,24 +49,26 @@
 /////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////
-- (void) presentOverlayOn:(UIViewController*) parent
+- (void) presentOverlayOn:(UIView*) parent
                  animated:(BOOL) animated
-          completionBlock:(UIXOverlayViewControllerBlock)completionBlock
+          completionBlock:(UIXOverlayViewBlock)completionBlock
 {
+    self.animated = animated;
+    
     self.whenPresented = [NSDate date];
     __weak __typeof__ (self) weakself = self;
     
     NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(maskTapped) name:DISMISS_MASK_NOTIFICATION object:nil];
         
-        [parent addChildViewController:self];
+        //[parent addChildViewController:self];
         
         //create mask
-        CGRect frame = parent.view.frame;
+        CGRect frame = parent.frame;
         frame.origin.x = 0;
         frame.origin.y = 0;
         
-        self.maskView = [[UIXOverlayControllerMaskView alloc] initWithFrame:frame];
+        self.maskView = [[UIXOverlayMaskView alloc] initWithFrame:frame];
         
         self.maskView.backgroundColor = (self.maskColor != nil) ? self.maskColor : [UIColor colorWithWhite:.0 alpha:.75];
         
@@ -73,7 +76,10 @@
         {
             self.displayCompletionBlock = completionBlock;
             self.maskView.alpha = 0.0;
-            [parent.view addSubview:self.maskView];
+            [parent addSubview:self.maskView];
+            [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
+            [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
+            [parent setNeedsLayout];
             
             [UIView beginAnimations:@"maskfadein" context:nil];
             [UIView setAnimationDidStopSelector:@selector(maskFadeInComplete:finished:context:)];
@@ -84,22 +90,42 @@
         }
         else
         {
-            [parent.view addSubview:self.maskView];
+            [parent addSubview:self.maskView];
             
-            frame = self.view.frame;
+            [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
+            [parent addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mask]|"options:nil metrics:nil views:@{@"mask":self.maskView}]];
+            [parent setNeedsLayout];
+            frame = self.frame;
             
             CGRect placement = frame;
-            placement.origin.x = (parent.view.frame.size.width - placement.size.width)/2;
-            placement.origin.y = (parent.view.frame.size.height - placement.size.height)/2;
+            placement.origin.x = (parent.frame.size.width - placement.size.width)/2;
+            placement.origin.y = (parent.frame.size.height - placement.size.height)/2;
             
-            self.view.frame = placement;
+            self.frame = placement;
             
-            [self.maskView addSubview:self.view];
+            [self.maskView addSubview:self];
+            [self.maskView addConstraint:
+             [NSLayoutConstraint constraintWithItem:self
+                                          attribute:NSLayoutAttributeCenterX
+                                          relatedBy:NSLayoutRelationEqual
+                                             toItem:self.maskView
+                                          attribute:NSLayoutAttributeCenterX
+                                         multiplier:1
+                                           constant:0]];
+            [self.maskView addConstraint:
+             [NSLayoutConstraint constraintWithItem:self
+                                          attribute:NSLayoutAttributeCenterY
+                                          relatedBy:NSLayoutRelationEqual
+                                             toItem:self.maskView
+                                          attribute:NSLayoutAttributeCenterY
+                                         multiplier:1
+                                           constant:0]];
             
-            if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
-            {
-                [self viewDidAppear:NO];
-            }
+            
+//            if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+//            {
+//                [self viewDidAppear:NO];
+//            }
             
             if (completionBlock != nil)
             {
@@ -122,7 +148,7 @@
     
     if (self.dismissUponTouchMask)
     {
-        [self dismissOverlay:YES];
+        [self dismissOverlay:self.animated];
     }
 }
 
@@ -137,31 +163,42 @@
         [self.overlayDelegate overlayWillDisplayContent:self];
     }
     
-    CGRect frame = self.view.frame;
+    CGRect frame = self.frame;
     
     CGRect placement = frame;
-    placement.origin.x = (self.parentViewController.view.frame.size.width - placement.size.width)/2;
-    placement.origin.y = (self.parentViewController.view.frame.size.height - placement.size.height)/2;
+    placement.origin.x = (self.maskView.frame.size.width - placement.size.width)/2;
+    placement.origin.y = (self.maskView.frame.size.height - placement.size.height)/2;
     
-    self.view.frame = placement;
-    self.view.alpha = 0.0;
+    self.frame = placement;
+    self.alpha = 0.0;
     
-    [self.maskView addSubview:self.view];
+    [self.maskView addSubview:self];
+    [self.maskView addConstraint:
+     [NSLayoutConstraint constraintWithItem:self
+                                  attribute:NSLayoutAttributeCenterX
+                                  relatedBy:NSLayoutRelationEqual
+                                     toItem:self.maskView
+                                  attribute:NSLayoutAttributeCenterX
+                                 multiplier:1
+                                   constant:0]];
+    [self.maskView addConstraint:
+     [NSLayoutConstraint constraintWithItem:self
+                                  attribute:NSLayoutAttributeCenterY
+                                  relatedBy:NSLayoutRelationEqual
+                                     toItem:self.maskView
+                                  attribute:NSLayoutAttributeCenterY
+                                 multiplier:1
+                                   constant:0]];
     
     [UIView animateWithDuration:0.25
                      animations:^(void) {
-                         self.view.alpha = 1.0;
+                         self.alpha = 1.0;
                          self.maskView.alpha = 1.0;
                      }
                      completion:^(BOOL finished) {
                          if ([self.overlayDelegate respondsToSelector:@selector(overlayContentDisplayed:)])
                          {
                              [self.overlayDelegate overlayContentDisplayed:self];
-                         }
-                         
-                         if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
-                         {
-                             [self viewDidAppear:YES];
                          }
                          
                          if (self.displayCompletionBlock != nil)
@@ -193,10 +230,10 @@
 - (void)maskFadeOutComplete:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
 {
     NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
-    {
-        [self viewDidDisappear:YES];
-    }
+//    if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+//    {
+//        [self viewDidDisappear:YES];
+//    }
 
     [self detachOverlay];
 
@@ -208,6 +245,7 @@
     [[NSOperationQueue mainQueue] addOperation:blockOp];
 }
 
+#if 0
 /////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////
@@ -216,9 +254,10 @@
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         self.maskView.frame = CGRectMake(0, 0, size.width, size.height);
-        self.view.center = self.maskView.center;
+        self.center = self.maskView.center;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {}];
 }
+#endif
 
 ///////////////////////////////////////////////
 //
@@ -232,7 +271,7 @@
 //
 ///////////////////////////////////////////////
 - (void) dismissOverlay:(BOOL) animated
-        completionBlock:(UIXOverlayViewControllerBlock) completionBlock;
+        completionBlock:(UIXOverlayViewBlock) completionBlock;
 {
     NSDate* now = [NSDate date];
     
@@ -248,7 +287,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         NSBlockOperation* blockOp = [NSBlockOperation blockOperationWithBlock:^{
-            [self.view removeFromSuperview];
+            [self removeFromSuperview];
             
             if (animated)
             {
@@ -262,10 +301,10 @@
             }
             else
             {
-                if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
-                {
-                    [self viewDidDisappear:NO];
-                }
+//                if ([[UIDevice currentDevice].systemVersion floatValue] < 5.0)
+//                {
+//                    [self viewDidDisappear:NO];
+//                }
                 [self detachOverlay];
                 
                 if (completionBlock != nil)
@@ -286,7 +325,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
-@implementation UIXOverlayControllerMaskView
+@implementation UIXOverlayMaskView
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [[NSNotificationCenter defaultCenter] postNotificationName:DISMISS_MASK_NOTIFICATION object:nil];
